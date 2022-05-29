@@ -1,0 +1,36 @@
+﻿@model Forum.Models.Post
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Topic</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            @Html.Hidden("Post.TopicId", ViewData["TopicId"])
+            @Html.Hidden("Post.UserId", ViewData["UserId"])
+            @Html.Hidden("Post.Id", ViewData["PostId"])
+            <div class="form-group">
+               <p>Title</p>
+                @Html.TextBox("Post.Title", Model.Title)
+	        </div>
+            <div class="form-group">
+               <p>Text</p>
+                @Html.TextArea("Post.Text", Model.Text) 
+	        </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-route-id="@ViewData["TopicId"]">Back to List</a>
+</div>

@@ -1,0 +1,47 @@
+﻿@model Forum.Models.Topic
+
+@{
+    ViewData["Title"] = "Topic";
+}
+
+<h1>@ViewData["Topic"]</h1>
+
+@if(User.Identity.IsAuthenticated)
+{                      
+    <p>
+        <a asp-action="Create" asp-route-id="@Model.Id">New post</a>
+    </p>
+} 
+@{
+    List<Forum.Models.User> allUsers = ViewBag.AllUsers;
+}
+
+<table class="table">
+    <tbody>
+@foreach (var post in Model.Posts) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => post.CreatedDate)
+        </td>
+        <td>
+            <b>@Html.DisplayFor(modelItem => post.Title)</b>
+        </td>
+        <td>
+            @if(User.IsInRole("admin") || allUsers.FirstOrDefault(u => u.Id == post.UserId)?.Email == User.Identity.Name )
+                {
+                    <a asp-action="Edit" asp-route-id="@post.Id">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@post.Id">Delete</a>
+                }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>@allUsers.FirstOrDefault(u => u.Id == post.UserId)?.Name</b>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => post.Text)
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

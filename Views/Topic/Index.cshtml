@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Forum.Models.Topic>
+
+@{
+    ViewData["Title"] = "Topics";
+}
+@{
+    List<Post> posts = ViewBag.Posts;
+}
+<h1>Topics</h1>
+
+@if(User.Identity.IsAuthenticated)
+{                      
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+} 
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Topic
+            </th>
+            <th>
+                Posts
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                <a asp-action="Index" asp-controller="Post" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a> 
+            </td>
+            <td>
+                @posts.Where(p => p.TopicId == item.Id).Count()
+            </td>
+            <td>
+                 @if(User.IsInRole("admin"))
+                 {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                 }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
